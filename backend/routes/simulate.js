@@ -225,104 +225,106 @@ router.post('/', async (req, res, next) => {
     const activeCtx = getContext().active();
 
     // 5. Processamento em background com contexto propagado
-    setImmediate(getContext().with(activeCtx, async () => {
-      try {
-        jobManager.updateJob(jobId, { status: 'processing', progress: 10 });
+    setImmediate(() => {
+      getContext().with(activeCtx, async () => {
+        try {
+          jobManager.updateJob(jobId, { status: 'processing', progress: 10 });
 
-        // Span filho: análise de sala
-        const context = await withSpan('roomAnalyzer.analyzeRoom', {}, async (span) => {
-          const result = await analyzeRoom(imageBase64);
-          span.setAttributes({
-            'room.geometry': result.geometry || 'unknown',
-            'room.obstacles_count': result.obstacles ?? 0,
-            'room.lighting': result.lighting || 'unknown',
+          // Span filho: análise de sala
+          const context = await withSpan('roomAnalyzer.analyzeRoom', {}, async (span) => {
+            const result = await analyzeRoom(imageBase64);
+            span.setAttributes({
+              'room.geometry': result.geometry || 'unknown',
+              'room.obstacles_count': result.obstacles ?? 0,
+              'room.lighting': result.lighting || 'unknown',
+            });
+            return result;
           });
-          return result;
-        });
-        jobManager.updateJob(jobId, { progress: 25 });
+          jobManager.updateJob(jobId, { progress: 25 });
 
-        // Span filho: chamada ao provider de IA
-        const result = await withSpan('providerRouter.route', {}, async (span) => {
-          const r = await applyMaterial(imageBase64, material, context);
-          span.setAttributes({
-            'provider.id': r.provider || (r.fallback ? 'local-fallback' : 'unknown'),
-            'provider.difficulty': context?.difficulty || 'unknown',
-            'provider.fidelity': r.fidelity ?? 0,
-            'provider.fallback': !!r.fallback,
+          // Span filho: chamada ao provider de IA
+          const result = await withSpan('providerRouter.route', {}, async (span) => {
+            const r = await applyMaterial(imageBase64, material, context);
+            span.setAttributes({
+              'provider.id': r.provider || (r.fallback ? 'local-fallback' : 'unknown'),
+              'provider.difficulty': context?.difficulty || 'unknown',
+              'provider.fidelity': r.fidelity ?? 0,
+              'provider.fallback': !!r.fallback,
+            });
+            return r;
           });
-          return r;
-        });
 
-        // Incrementa uso após chamada ao provider
-        if (req.client?.key) {
-          incrementUsage(req.client.key);
-        }
+          // Incrementa uso após chamada ao provider
+          if (req.client?.key) {
+            incrementUsage(req.client.key);
+          }
 
-        jobManager.updateJob(jobId, { progress: 75 });
+          jobManager.updateJob(jobId, { progress: 75 });
 
-        if (result.fallback) {
-          jobManager.updateJob(jobId, {
-            status: 'failed',
-            error: result.fallbackDescription || 'Todos os provedores falharam',
+          if (result.fallback) {
+            jobManager.updateJob(jobId, {
+              status: 'failed',
+              error: result.fallbackDescription || 'Todos os provedores falharam',
+            });
+            rootSpan.setStatus({ code: 2, message: result.fallbackDescription });
+            rootSpan.end();
+            if (webhookUrl) {
+              await sendWebhookNotification(webhookUrl, { jobId, status: 'failed', error: result.fallbackDescription });
+            }
+            return;
+          }
+
+          // Span filho: validação de invariantes
+          const invariantResult = await withSpan('validator.validateInvariants', {}, async (span) => {
+            const r = await validateInvariants(imageBase64, result.editedImageBase64, result.context || context);
+            span.setAttributes({
+              'validation.overall_score': r.overallScore ?? 0,
+              'validation.violated': !!r.violated,
+              ...(r.violated && r.invariant ? { 'validation.invariant': r.invariant } : {}),
+            });
+            return r;
           });
-          rootSpan.setStatus({ code: 2, message: result.fallbackDescription });
+          jobManager.updateJob(jobId, { progress: 90 });
+
+          if (invariantResult.violated) {
+            const errMsg = `Invariant violation: ${invariantResult.invariant} (score ${invariantResult.scores?.[invariantResult.invariant]?.toFixed(2)})`;
+            jobManager.updateJob(jobId, { status: 'failed', error: errMsg });
+            rootSpan.setStatus({ code: 2, message: errMsg });
+            rootSpan.end();
+            if (webhookUrl) {
+              await sendWebhookNotification(webhookUrl, { jobId, status: 'failed', error: errMsg });
+            }
+            return;
+          }
+
+          // Sucesso
+          const successResult = {
+            editedImageBase64: result.editedImageBase64,
+            fidelity: result.fidelity,
+            context: result.context || context,
+          };
+
+          if (idempotencyKey) setIdempotentResult(idempotencyKey, successResult);
+          jobManager.updateJob(jobId, { status: 'completed', progress: 100, result: successResult });
+          rootSpan.setStatus({ code: 1 });
+          rootSpan.end();
+          log('info', 'simulate', 'async_job_completed', { clientId, jobId, provider: result.provider, fidelity: result.fidelity });
+
+          if (webhookUrl) {
+            await sendWebhookNotification(webhookUrl, { jobId, status: 'completed', result: successResult });
+          }
+        } catch (err) {
+          log('error', 'simulate', 'async_job_failed', { clientId, jobId, error: err.message });
+          jobManager.updateJob(jobId, { status: 'failed', error: err.message });
+          rootSpan.setStatus({ code: 2, message: err.message });
+          rootSpan.setAttribute('error.message', err.message);
           rootSpan.end();
           if (webhookUrl) {
-            await sendWebhookNotification(webhookUrl, { jobId, status: 'failed', error: result.fallbackDescription });
+            await sendWebhookNotification(webhookUrl, { jobId, status: 'failed', error: err.message });
           }
-          return;
         }
-
-        // Span filho: validação de invariantes
-        const invariantResult = await withSpan('validator.validateInvariants', {}, async (span) => {
-          const r = await validateInvariants(imageBase64, result.editedImageBase64, result.context || context);
-          span.setAttributes({
-            'validation.overall_score': r.overallScore ?? 0,
-            'validation.violated': !!r.violated,
-            ...(r.violated && r.invariant ? { 'validation.invariant': r.invariant } : {}),
-          });
-          return r;
-        });
-        jobManager.updateJob(jobId, { progress: 90 });
-
-        if (invariantResult.violated) {
-          const errMsg = `Invariant violation: ${invariantResult.invariant} (score ${invariantResult.scores?.[invariantResult.invariant]?.toFixed(2)})`;
-          jobManager.updateJob(jobId, { status: 'failed', error: errMsg });
-          rootSpan.setStatus({ code: 2, message: errMsg });
-          rootSpan.end();
-          if (webhookUrl) {
-            await sendWebhookNotification(webhookUrl, { jobId, status: 'failed', error: errMsg });
-          }
-          return;
-        }
-
-        // Sucesso
-        const successResult = {
-          editedImageBase64: result.editedImageBase64,
-          fidelity: result.fidelity,
-          context: result.context || context,
-        };
-
-        if (idempotencyKey) setIdempotentResult(idempotencyKey, successResult);
-        jobManager.updateJob(jobId, { status: 'completed', progress: 100, result: successResult });
-        rootSpan.setStatus({ code: 1 });
-        rootSpan.end();
-        log('info', 'simulate', 'async_job_completed', { clientId, jobId, provider: result.provider, fidelity: result.fidelity });
-
-        if (webhookUrl) {
-          await sendWebhookNotification(webhookUrl, { jobId, status: 'completed', result: successResult });
-        }
-      } catch (err) {
-        log('error', 'simulate', 'async_job_failed', { clientId, jobId, error: err.message });
-        jobManager.updateJob(jobId, { status: 'failed', error: err.message });
-        rootSpan.setStatus({ code: 2, message: err.message });
-        rootSpan.setAttribute('error.message', err.message);
-        rootSpan.end();
-        if (webhookUrl) {
-          await sendWebhookNotification(webhookUrl, { jobId, status: 'failed', error: err.message });
-        }
-      }
-    }));
+      }).catch(next);
+    });
 
   } catch (err) {
     log('error', 'simulate', 'simulation_error', { clientId, error: err.message, latencyMs: Date.now() - startTime });

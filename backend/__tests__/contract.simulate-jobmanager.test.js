@@ -41,7 +41,7 @@ vi.mock('../services/core/validator.js', () => ({
 }));
 
 vi.mock('../services/core/simulationCache.js', () => ({
-  getSimulationCacheKey: vi.fn().mockReturnValue('test-cache-key'),
+  getSimulationCacheKey: vi.fn().mockImplementation(() => 'cache-' + Math.random().toString(36).slice(2)),
   getCachedSimulation: vi.fn().mockReturnValue(null),
   setCachedSimulation: vi.fn(),
 }));
