@@ -1,6 +1,6 @@
-# 📋 Procedimento de Validação Massiva - PisoRealView Pro
+# 📋 Procedimento de Validação Massiva - MaterialView Pro
 
-Este documento descreve o procedimento completo para validação em escala do sistema de renderização PisoRealView.
+Este documento descreve o procedimento completo para validação em escala do sistema de renderização MaterialView.
 
 ## 🎯 Objetivo
 
@@ -17,7 +17,7 @@ Validar a infraestrutura de IA através de testes massivos automatizados, identi
 
 ```bash
 # 1. Navegar para o diretório CLI
-cd pisosrealview-pro-transformed/cli
+cd MaterialView-Pro/cli
 
 # 2. Instalar dependências (se necessário)
 npm install
@@ -148,7 +148,7 @@ npm install
 
 ### GitHub Actions
 ```yaml
-name: PisoRealView Validation
+name: MaterialView Validation
 on: [push, pull_request]
 
 jobs:
@@ -161,16 +161,16 @@ jobs:
           node-version: '18'
       
       - name: Install dependencies
-        run: cd pisosrealview-pro-transformed/cli && npm install
+        run: cd MaterialView-Pro/cli && npm install
         
       - name: Run validation
-        run: cd pisosrealview-pro-transformed/cli && ./validate-all.sh
+        run: cd MaterialView-Pro/cli && ./validate-all.sh
         
       - name: Upload reports
         uses: actions/upload-artifact@v3
         with:
           name: validation-reports
-          path: pisosrealview-pro-transformed/cli/validation-reports/
+          path: MaterialView-Pro/cli/validation-reports/
 ```
 
 ### Script de Deploy
@@ -178,7 +178,7 @@ jobs:
 #!/bin/bash
 # pre-deploy-validation.sh
 
-cd pisosrealview-pro-transformed/cli
+cd MaterialView-Pro/cli
 
 # Executar validação
 if ./validate-all.sh; then

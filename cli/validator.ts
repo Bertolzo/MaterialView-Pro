@@ -14,7 +14,7 @@ interface ValidationOptions {
   threshold: number;
 }
 
-class PisorealCLIValidator {
+class MaterialViewCLIValidator {
   private orchestrator: RenderOrchestrator;
   private options: ValidationOptions;
 
@@ -211,4 +211,4 @@ class PisorealCLIValidator {
   }
 }
 
-export { PisorealCLIValidator, ValidationOptions };
+export { MaterialViewCLIValidator, ValidationOptions };

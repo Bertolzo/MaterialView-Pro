@@ -1,10 +1,10 @@
 {
-  "name": "pisoreal-validator-cli",
+  "name": "materialview-cli",
   "version": "1.0.0",
-  "description": "CLI para validação massiva do Pisorealview Pro",
+  "description": "CLI for MaterialView Pro — surface material validation",
   "type": "module",
   "bin": {
-    "pisoreal-validator": "./index.js"
+    "materialview-validator": "./index.js"
   },
   "scripts": {
     "build": "tsc",

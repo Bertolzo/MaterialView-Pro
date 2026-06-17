@@ -1,6 +1,6 @@
 {
   "dataset_info": {
-    "name": "Pisorealview Validation Dataset",
+    "name": "MaterialView Validation Dataset",
     "version": "1.0.0",
     "description": "Dataset para validação massiva do sistema de renderização",
     "total_photos": 18,

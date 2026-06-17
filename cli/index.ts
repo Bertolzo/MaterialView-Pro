@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { PisorealCLIValidator } from './validator';
+import { MaterialViewCLIValidator } from './validator';
 import fs from 'fs';
 import path from 'path';
 
 const program = new Command();
 
 program
-  .name('pisoreal-validator')
-  .description('CLI tool for validating Pisorealview rendering system')
+  .name('materialview-validator')
+  .description('CLI tool for MaterialView Pro — material simulation validation')
   .version('1.0.0');
 
 // Comando: single - validação única
@@ -23,7 +23,7 @@ program
   .action(async (imagePath, options) => {
     try {
       const materialSpecs = await parseMaterialSpecs(options.material);
-      const validator = new PisorealCLIValidator({
+      const validator = new MaterialViewCLIValidator({
         timeoutMs: parseInt(options.timeout),
         verbose: options.verbose,
         threshold: 0.7
@@ -57,7 +57,7 @@ program
   .action(async (directoryPath, options) => {
     try {
       const materialSpecs = await parseMaterialSpecs(options.material);
-      const validator = new PisorealCLIValidator({
+      const validator = new MaterialViewCLIValidator({
         timeoutMs: parseInt(options.timeout),
         verbose: options.verbose,
         threshold: 0.7
@@ -94,7 +94,7 @@ program
   .option('--threshold <score>', 'Minimum threshold score (0-1)', '0.7')
   .action(async (testDirectory, options) => {
     try {
-      const validator = new PisorealCLIValidator({
+      const validator = new MaterialViewCLIValidator({
         timeoutMs: parseInt(options.timeout),
         verbose: options.verbose,
         threshold: parseFloat(options.threshold)
