@@ -1,4 +1,4 @@
-import { RenderRequest, RenderResult, RoomAnalysis, FidelityLevel } from './types';
+import { RenderRequest, RenderResult, RoomAnalysis, FidelityLevel, GatewayRenderResult } from './types';
 import { validateInputImage } from './validation';
 import { analyzeRoomGeometry } from './roomAnalyzer';
 // Material simulator removido - unificado via gateway API
@@ -39,7 +39,7 @@ export class RenderOrchestrator {
         imageBase64: gatewayResult.image,
         fidelityLevel,
         processingTimeMs: Date.now() - startTime,
-        metrics: { provider: gatewayResult.provider || 'gateway' }
+        metrics: { roomDetectionTime: 0, renderingTime: 0, validationTime: 0, cacheHit: false }
       };
 
     } catch (error) {
@@ -58,18 +58,23 @@ export class RenderOrchestrator {
     const prompt = `Simule o material: ${request.materialSpecs.name} ${request.materialSpecs.category} no ambiente`;
     
     try {
-      // Chamada direta ao gateway (futuramente seria HTTP)
-      const { gatewayOrchestrator } = await import('../../../../src/services/gateway');
-      const result = await gatewayOrchestrator.callWithFallback({
-        image: imageBase64,
-        prompt,
-        maxTokens: 500
+      // CLI não deve importar diretamente o backend — faz chamada HTTP
+      const response = await fetch(`http://localhost:${process.env.PORT || 3001}/v1/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-sync-mode': 'true' },
+        body: JSON.stringify({
+          imageBase64,
+          material: { type: request.materialSpecs.category, color: 'default', dimensions: 'standard' }
+        })
       });
 
+      if (!response.ok) throw new Error(`Gateway HTTP ${response.status}`);
+
+      const data = await response.json();
       return {
         success: true,
-        image: result.text, // Assume que result.text contém base64 da imagem
-        provider: 'gateway'
+        image: data.editedImageBase64,
+        provider: 'http-gateway'
       };
     } catch (error) {
       return {

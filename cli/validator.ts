@@ -23,7 +23,6 @@ class MaterialViewCLIValidator {
       timeoutMs: 8000,
       maxRetries: 1,
       verbose: false,
-      threshold: 0.7,
       ...options
     };
     
@@ -211,4 +210,5 @@ class MaterialViewCLIValidator {
   }
 }
 
-export { MaterialViewCLIValidator, ValidationOptions };
+export { MaterialViewCLIValidator };
+export type { ValidationOptions };

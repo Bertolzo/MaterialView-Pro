@@ -11,7 +11,7 @@ export async function analyzeRoomGeometry(imageBuffer: Buffer): Promise<RoomAnal
       geometry: realContext.geometry,
       obstacles: realContext.obstacles,
       lighting: realContext.lighting,
-      floorArea: realContext.floorArea,
+      floorArea: realContext.surfaceArea,
       roomType: realContext.roomType
     };
     

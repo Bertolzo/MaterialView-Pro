@@ -7,8 +7,11 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  backend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -18,6 +21,42 @@ jobs:
           cache-dependency-path: backend/package-lock.json
           cache: 'npm'
       - name: Install dependencies
-        run: cd backend && npm ci
+        run: npm ci
       - name: Run tests
-        run: cd backend && npm test
+        run: npm test
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache-dependency-path: frontend/package-lock.json
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+
+  cli:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache-dependency-path: cli/package-lock.json
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: TypeScript check
+        run: npm run build

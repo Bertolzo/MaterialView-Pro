@@ -20,6 +20,7 @@ function defaultHeaders() {
   const apiKey = getApiKey();
   if (apiKey) headers['x-api-key'] = apiKey;
   headers['idempotency-key'] = generateIdempotencyKey();
+  headers['x-sync-mode'] = 'true';
   return headers;
 }
 

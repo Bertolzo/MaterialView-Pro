@@ -61,6 +61,14 @@ export interface BatchResult {
   details: RenderResult[];
 }
 
+export interface RoomAnalysis {
+  geometry: 'rectangular' | 'l-shaped' | 'corridor' | 'complex';
+  obstacles: number;
+  lighting: 'good' | 'medium' | 'poor';
+  floorArea: number;
+  roomType?: string;
+}
+
 export interface GatewayRenderResult {
   success: boolean;
   image?: string;
