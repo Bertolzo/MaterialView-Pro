@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { RenderOrchestrator } from '../services/core/orchestrator';
-import { validateMaterialSpecs } from '../services/core/validation';
-import { BatchResult, RenderRequest, MaterialSpecs } from '../services/core/types';
+import { RenderOrchestrator } from './lib/core/orchestrator';
+import { validateMaterialSpecs } from './lib/core/validation';
+import { BatchResult, RenderRequest, MaterialSpecs } from './lib/core/types';
 import fs from 'fs';
 import path from 'path';
 

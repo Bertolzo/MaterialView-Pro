@@ -62,6 +62,7 @@ describe('Fluxo Trial – apiKeyStore', () => {
   it('deve criar conta trial com 50 créditos e plan=trial', async () => {
     const { createKey, loadKeys } = await import('../../apiKeyStore.js');
     const key = createKey({ clientId: 'trial_test_1', planId: 'trial', email: 'a@b.com', storeName: 'Loja A' });
+    await new Promise(r => setTimeout(r, 0));
     expect(key).toMatch(/^sk_live_/);
     const keys = loadKeys();
     const client = keys[key];
@@ -77,11 +78,13 @@ describe('Fluxo Trial – apiKeyStore', () => {
   it('deve decrementar créditos trial a cada uso (sem rollover mensal)', async () => {
     const { createKey, incrementUsage, loadKeys } = await import('../../apiKeyStore.js');
     const key = createKey({ clientId: 'trial_test_2', planId: 'trial' });
+    await new Promise(r => setTimeout(r, 0));
 
     // Simular 3 usos
     incrementUsage(key);
     incrementUsage(key);
     incrementUsage(key);
+    await new Promise(r => setTimeout(r, 0));
 
     const keys = loadKeys();
     expect(keys[key].credits).toBe(47);
@@ -93,9 +96,11 @@ describe('Fluxo Trial – apiKeyStore', () => {
   it('créditos trial não devem resetar com mudança de mês (sem rollover)', async () => {
     const { createKey, incrementUsage, loadKeys } = await import('../../apiKeyStore.js');
     const key = createKey({ clientId: 'trial_test_3', planId: 'trial' });
+    await new Promise(r => setTimeout(r, 0));
 
     // Usar 10 créditos
     for (let i = 0; i < 10; i++) incrementUsage(key);
+    await new Promise(r => setTimeout(r, 0));
 
     const keysAfterUse = loadKeys();
     expect(keysAfterUse[key].credits).toBe(40);
@@ -110,15 +115,18 @@ describe('Fluxo Trial – apiKeyStore', () => {
   it('não deve decrementar créditos abaixo de zero', async () => {
     const { createKey, incrementUsage, loadKeys } = await import('../../apiKeyStore.js');
     const key = createKey({ clientId: 'trial_test_4', planId: 'trial' });
+    await new Promise(r => setTimeout(r, 0));
 
     // Usar todos os 50 créditos
     for (let i = 0; i < 50; i++) incrementUsage(key);
+    await new Promise(r => setTimeout(r, 0));
 
     const keysAfterExhaust = loadKeys();
     expect(keysAfterExhaust[key].credits).toBe(0);
 
     // Tentar usar mais um — não deve ir negativo
     incrementUsage(key);
+    await new Promise(r => setTimeout(r, 0));
     const keysFinal = loadKeys();
     expect(keysFinal[key].credits).toBe(0);
   });
@@ -126,9 +134,11 @@ describe('Fluxo Trial – apiKeyStore', () => {
   it('plano basic deve usar rollover mensal (não campo credits)', async () => {
     const { createKey, incrementUsage, loadKeys } = await import('../../apiKeyStore.js');
     const key = createKey({ clientId: 'basic_test_1', planId: 'basic' });
+    await new Promise(r => setTimeout(r, 0));
 
     incrementUsage(key);
     incrementUsage(key);
+    await new Promise(r => setTimeout(r, 0));
 
     const keys = loadKeys();
     const month = new Date().toISOString().slice(0, 7);
@@ -179,6 +189,7 @@ describe('Fluxo Trial – middleware apiKey', () => {
   it('deve bloquear acesso quando créditos trial esgotados', async () => {
     const { createKey, loadKeys, saveKeys } = await import('../../apiKeyStore.js');
     const key = createKey({ clientId: 'trial_mw_2', planId: 'trial' });
+    await new Promise(r => setTimeout(r, 0));
 
     // Zerar créditos manualmente
     const keys = loadKeys();
@@ -202,6 +213,7 @@ describe('Fluxo Trial – middleware apiKey', () => {
   it('plano basic deve incluir resetAt na resposta de limite atingido', async () => {
     const { createKey, loadKeys, saveKeys } = await import('../../apiKeyStore.js');
     const key = createKey({ clientId: 'basic_mw_1', planId: 'basic' });
+    await new Promise(r => setTimeout(r, 0));
 
     // Simular uso máximo via campo usage
     const keys = loadKeys();

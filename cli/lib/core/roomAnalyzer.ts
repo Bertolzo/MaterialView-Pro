@@ -1,11 +1,11 @@
 import { RoomAnalysis } from './types';
-import { detectRoomContext } from '../ai/gemini/detection';
+import { detectSurfaceContext } from '../ai/gemini/detection';
 
 export async function analyzeRoomGeometry(imageBuffer: Buffer): Promise<RoomAnalysis> {
   // Substituição do mock pela integração real com Gemini
   try {
     const imageBase64 = imageBuffer.toString('base64');
-    const realContext = await detectRoomContext(imageBase64);
+    const realContext = await detectSurfaceContext(imageBase64);
     
     return {
       geometry: realContext.geometry,

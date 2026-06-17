@@ -1,4 +1,4 @@
-import { BatchResult } from '../services/core/types';
+import { BatchResult } from './lib/core/types';
 import fs from 'fs';
 
 /**
