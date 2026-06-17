@@ -1,0 +1,12 @@
+PLACEHOLDER: bathroom-001
+Category: bathroom
+Difficulty: easy
+Expected Floor Coverage: 60%
+
+⚠️  Em produção, este arquivo seria substituído por uma foto real
+Para usar fotos reais:
+1. Baixe as URLs de photo-sources.json
+2. Use curl/wget para download:
+   curl -o "real-test-photos/bathroom/bathroom-001.jpg" "URL_DO_UNSPLASH"
+
+OU use o script download-real-photos.sh

@@ -1,0 +1,26 @@
+{
+  "name": "pisosrealview-frontend",
+  "version": "1.0.0",
+  "description": "Frontend React + Vite para PisosRealView",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@vitejs/plugin-react": "^4.3.1",
+    "fast-check": "^3.19.0",
+    "jsdom": "^24.1.1",
+    "vite": "^6.4.2",
+    "vitest": "^4.1.3"
+  }
+}

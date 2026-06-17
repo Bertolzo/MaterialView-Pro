@@ -1,0 +1,24 @@
+{
+  "name": "pisoreal-validator-cli",
+  "version": "1.0.0",
+  "description": "CLI para validação massiva do Pisorealview Pro",
+  "type": "module",
+  "bin": {
+    "pisoreal-validator": "./index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx ./index.ts",
+    "test-single": "tsx ./index.ts single ./test-photos/sala-001.jpg -v",
+    "test-batch": "tsx ./index.ts batch ./test-photos -v",
+    "test-system": "tsx ./index.ts system-test ./test-photos --threshold 0.7 -v"
+  },
+  "dependencies": {
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.0",
+    "typescript": "^5.2.0",
+    "tsx": "^4.0.0"
+  }
+}

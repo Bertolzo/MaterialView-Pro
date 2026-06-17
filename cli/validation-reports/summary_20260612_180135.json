@@ -1,0 +1,24 @@
+{
+  "validation_summary": {
+    "timestamp": "2026-06-12T18:01:40-03:00",
+    "total_categories": 6,
+    "categories_tested": [
+      "bathroom"
+      ,
+      "bedroom"
+      ,
+      "complex"
+      ,
+      "kitchen"
+      ,
+      "living-room"
+      ,
+      "office"
+    ],
+    "system_info": {
+      "cli_version": "1.0.0",
+      "node_version": "v20.18.0",
+      "total_test_files": 18
+    }
+  }
+}

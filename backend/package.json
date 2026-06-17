@@ -1,0 +1,34 @@
+{
+  "name": "pisosrealview-backend",
+  "version": "1.0.0",
+  "description": "Backend Express para PisosRealView — análise e simulação de materiais de piso",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --env-file=.env --watch server.js",
+    "test": "vitest run",
+    "deploy:staging": "bash ../scripts/deploy-staging.sh",
+    "deploy:production:canary": "bash ../scripts/deploy-canary.sh",
+    "deploy:production:full": "bash ../scripts/deploy-full.sh",
+    "rollback:legacy": "bash ../scripts/rollback.sh"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.54.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.57.0",
+    "@opentelemetry/sdk-node": "^0.57.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^8.0.0"
+  },
+  "devDependencies": {
+    "fast-check": "^3.19.0",
+    "supertest": "^7.0.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

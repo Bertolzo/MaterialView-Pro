@@ -1,0 +1,104 @@
+.differentiation-section {
+  background-color: var(--color-matte-black);
+}
+
+.diff-header {
+  margin-bottom: var(--space-xl);
+}
+
+.diff-table-container {
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.diff-table th, .diff-table td {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.diff-table th {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  color: var(--color-arch-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+}
+
+.feature-col {
+  width: 30%;
+  color: var(--color-soft-white);
+  font-weight: 500;
+}
+
+.trad-col {
+  width: 30%;
+  color: var(--text-secondary);
+}
+
+.our-col {
+  width: 40%;
+}
+
+.our-col.highlight {
+  color: var(--color-soft-white);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-check {
+  color: var(--color-accent-gold);
+}
+
+.icon-x {
+  color: #ef4444; /* muted red */
+  opacity: 0.5;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.trad-col {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust layout since we use flex in td */
+.diff-table td.trad-col, .diff-table td.our-col.highlight {
+  display: table-cell;
+}
+
+.diff-table td.our-col.highlight {
+  position: relative;
+}
+
+.diff-table td.our-col.highlight::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 40%;
+  background: var(--color-accent-gold);
+}
+
+.diff-table td.our-col.highlight {
+  padding-left: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .diff-table th, .diff-table td {
+    padding: 1rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}

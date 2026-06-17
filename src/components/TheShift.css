@@ -1,0 +1,90 @@
+.shift-section {
+  position: relative;
+  background-color: var(--color-matte-black);
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+}
+
+.shift-background {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.architectural-lines {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150vw;
+  height: 150vw;
+  background-image: 
+    linear-gradient(45deg, transparent 48%, var(--color-soft-white) 49%, var(--color-soft-white) 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, var(--color-soft-white) 49%, var(--color-soft-white) 51%, transparent 52%);
+  background-size: 200px 200px;
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.shift-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.shift-kicker {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-arch-gray);
+  margin-bottom: var(--space-md);
+  position: relative;
+  display: inline-block;
+}
+
+.shift-kicker::before,
+.shift-kicker::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 1px;
+  background: var(--color-arch-gray);
+}
+
+.shift-kicker::before {
+  right: 100%;
+  margin-right: 1rem;
+}
+
+.shift-kicker::after {
+  left: 100%;
+  margin-left: 1rem;
+}
+
+.shift-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+}
+
+.shift-divider {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--color-arch-gray), transparent);
+  margin: 0 auto var(--space-md);
+}
+
+.shift-description {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}

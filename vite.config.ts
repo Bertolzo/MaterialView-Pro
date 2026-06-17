@@ -1,0 +1,18 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 8080,
+    host: true,
+    open: true,
+    watch: {
+      ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**']
+    }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: true
+  }
+})

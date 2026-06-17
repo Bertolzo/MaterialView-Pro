@@ -1,0 +1,312 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PisosRealView Pro API",
+    "description": "API for floor material analysis and rendering service",
+    "version": "1.0.0",
+    "contact": {
+      "name": "PisosRealView Pro Support",
+      "email": "support@pisosrealview.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api.pisosrealview.com",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/api/analyze": {
+      "post": {
+        "summary": "Analyze floor material from image",
+        "description": "Upload an image for floor material analysis and receive detailed material information",
+        "operationId": "analyzeFloorMaterial",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["image"],
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Floor image file for analysis"
+                  },
+                  "scale": {
+                    "type": "number",
+                    "description": "Scale factor for the image (optional)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Analysis successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "material": {
+                      "type": "string",
+                      "description": "Detected material type"
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "Confidence score of the analysis"
+                    },
+                    "analysis": {
+                      "type": "object",
+                      "properties": {
+                        "texture": {
+                          "type": "string",
+                          "description": "Texture description"
+                        },
+                        "color": {
+                          "type": "string",
+                          "description": "Color information"
+                        },
+                        "condition": {
+                          "type": "string",
+                          "description": "Condition assessment"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request - missing image or invalid format"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/render": {
+      "post": {
+        "summary": "Render floor material with specified parameters",
+        "description": "Generate a rendered image of floor material based on analysis results and user preferences",
+        "operationId": "renderFloorMaterial",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["material", "analysis", "preferences"],
+                "properties": {
+                  "material": {
+                    "type": "string",
+                    "description": "Material type to render"
+                  },
+                  "analysis": {
+                    "type": "object",
+                    "description": "Analysis data from /api/analyze"
+                  },
+                  "preferences": {
+                    "type": "object",
+                    "properties": {
+                      "lighting": {
+                        "type": "string",
+                        "enum": ["natural", "warm", "cool", "studio"],
+                        "description": "Lighting preference"
+                      },
+                      "resolution": {
+                        "type": "string",
+                        "enum": ["low", "medium", "high", "ultra"],
+                        "description": "Output resolution"
+                      },
+                      "angle": {
+                        "type": "number",
+                        "description": "Camera angle in degrees"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Render successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "renderedUrl": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "URL to the rendered image"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "renderTime": {
+                          "type": "number",
+                          "description": "Time taken to render in milliseconds"
+                        },
+                        "quality": {
+                          "type": "string",
+                          "description": "Render quality level"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request - missing required parameters"
+          },
+          "422": {
+            "description": "Unprocessable entity - invalid material or preferences"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Check the health status of the API",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["healthy", "unhealthy"],
+                      "description": "Health status"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Current timestamp"
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "API version"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dashboard": {
+      "get": {
+        "summary": "Get dashboard metrics",
+        "description": "Retrieve system metrics and usage statistics",
+        "operationId": "getDashboardMetrics",
+        "responses": {
+          "200": {
+            "description": "Metrics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalRequests": {
+                      "type": "integer",
+                      "description": "Total number of API requests"
+                    },
+                    "successRate": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "Success rate of requests"
+                    },
+                    "averageResponseTime": {
+                      "type": "number",
+                      "description": "Average response time in milliseconds"
+                    },
+                    "activeUsers": {
+                      "type": "integer",
+                      "description": "Number of active users"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MaterialAnalysis": {
+        "type": "object",
+        "properties": {
+          "material": {
+            "type": "string",
+            "description": "Detected material type"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence score"
+          },
+          "texture": {
+            "type": "string",
+            "description": "Texture characteristics"
+          },
+          "color": {
+            "type": "string",
+            "description": "Color information"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Condition assessment"
+          }
+        }
+      },
+      "RenderPreferences": {
+        "type": "object",
+        "properties": {
+          "lighting": {
+            "type": "string",
+            "enum": ["natural", "warm", "cool", "studio"],
+            "description": "Lighting preference"
+          },
+          "resolution": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "ultra"],
+            "description": "Output resolution"
+          },
+          "angle": {
+            "type": "number",
+            "description": "Camera angle in degrees"
+          }
+        }
+      }
+    }
+  }
+}

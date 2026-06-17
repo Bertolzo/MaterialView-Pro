@@ -1,0 +1,39 @@
+{
+  "dataset_info": {
+    "name": "Pisorealview Validation Dataset",
+    "version": "1.0.0",
+    "description": "Dataset para validação massiva do sistema de renderização",
+    "total_photos": 18,
+    "categories": ["living-room", "kitchen", "bedroom", "bathroom", "office", "complex"]
+  },
+  "photo_details": [
+    {"id": "living-room-001", "category": "living-room", "expected_difficulty": "medium", "floor_coverage": 0.65},
+    {"id": "living-room-002", "category": "living-room", "expected_difficulty": "easy", "floor_coverage": 0.75},
+    {"id": "living-room-003", "category": "living-room", "expected_difficulty": "hard", "floor_coverage": 0.55},
+    
+    {"id": "kitchen-001", "category": "kitchen", "expected_difficulty": "easy", "floor_coverage": 0.70},
+    {"id": "kitchen-002", "category": "kitchen", "expected_difficulty": "medium", "floor_coverage": 0.60},
+    {"id": "kitchen-003", "category": "kitchen", "expected_difficulty": "hard", "floor_coverage": 0.45},
+    
+    {"id": "bedroom-001", "category": "bedroom", "expected_difficulty": "easy", "floor_coverage": 0.80},
+    {"id": "bedroom-002", "category": "bedroom", "expected_difficulty": "medium", "floor_coverage": 0.65},
+    {"id": "bedroom-003", "category": "bedroom", "expected_difficulty": "hard", "floor_coverage": 0.50},
+    
+    {"id": "bathroom-001", "category": "bathroom", "expected_difficulty": "medium", "floor_coverage": 0.60},
+    {"id": "bathroom-002", "category": "bathroom", "expected_difficulty": "easy", "floor_coverage": 0.75},
+    {"id": "bathroom-003", "category": "bathroom", "expected_difficulty": "hard", "floor_coverage": 0.40},
+    
+    {"id": "office-001", "category": "office", "expected_difficulty": "easy", "floor_coverage": 0.70},
+    {"id": "office-002", "category": "office", "expected_difficulty": "medium", "floor_coverage": 0.55},
+    {"id": "office-003", "category": "office", "expected_difficulty": "hard", "floor_coverage": 0.35},
+    
+    {"id": "complex-001", "category": "complex", "expected_difficulty": "hard", "floor_coverage": 0.30},
+    {"id": "complex-002", "category": "complex", "expected_difficulty": "very-hard", "floor_coverage": 0.25},
+    {"id": "complex-003", "category": "complex", "expected_difficulty": "extreme", "floor_coverage": 0.15}
+  ],
+  "validation_criteria": {
+    "success_rate_threshold": 0.7,
+    "high_fidelity_threshold": 0.5,
+    "max_processing_time": 8000
+  }
+}

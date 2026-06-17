@@ -1,0 +1,12 @@
+PLACEHOLDER: kitchen-001
+Category: kitchen
+Difficulty: easy
+Expected Floor Coverage: 70%
+
+⚠️  Em produção, este arquivo seria substituído por uma foto real
+Para usar fotos reais:
+1. Baixe as URLs de photo-sources.json
+2. Use curl/wget para download:
+   curl -o "real-test-photos/kitchen/kitchen-001.jpg" "URL_DO_UNSPLASH"
+
+OU use o script download-real-photos.sh

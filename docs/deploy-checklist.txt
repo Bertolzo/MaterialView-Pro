@@ -1,0 +1,144 @@
+╔══════════════════════════════════════════════════════════════╗
+║  ✅ CHECKLIST DE DEPLOY - CORREÇÃO ERRO 500 VERCEL         ║
+╔══════════════════════════════════════════════════════════════╝
+
+📋 ANTES DO DEPLOY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+□ 1. Verificar variáveis de ambiente no Vercel Dashboard
+   → https://vercel.com/seu-user/seu-projeto/settings/environment-variables
+   
+   Obrigatórias:
+   ✓ GEMINI_API_KEY=AIzaSyC90f4XPb9BGTYed7ZOTY5MvdUh-pZ2Wh0
+   ✓ HF_API_KEY=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
+   ✓ GATEWAY_MODE=mvp
+   ✓ SENTRY_DSN=sua-dsn (opcional)
+
+□ 2. Testar localmente
+   $ npm install
+   $ vercel dev
+   $ curl -X POST http://localhost:3000/api/analyze \
+       -H "Content-Type: application/json" \
+       -d '{"image":"data:image/png;base64,iVBORw0KGg..."}'
+
+□ 3. Verificar arquivos modificados
+   ✓ api/analyze.ts          (timeout 8s, logs detalhados)
+   ✓ vercel.json             (maxDuration: 10, memory: 1024)
+
+
+🚀 PROCESSO DE DEPLOY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Opção A - Via Git (Recomendado):
+  $ git add api/analyze.ts vercel.json
+  $ git commit -m "fix: Ajusta timeout para Hobby Plan (10s max)"
+  $ git push origin main
+  → Vercel auto-deploy em ~2 minutos
+
+Opção B - Via CLI:
+  $ vercel --prod
+  → Deploy direto em ~3 minutos
+
+
+📊 APÓS O DEPLOY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+□ 1. Aguardar build completar (2-3 min)
+
+□ 2. Testar em produção
+   $ ./test-production-api.sh https://seu-projeto.vercel.app
+   
+   Ou manualmente:
+   $ curl -X POST https://seu-projeto.vercel.app/api/analyze \
+       -H "Content-Type: application/json" \
+       -d '{"image":"data:image/png;base64,iVBORw0KGg..."}'
+
+□ 3. Verificar logs em tempo real
+   $ vercel logs --follow
+   
+   Ou via Dashboard:
+   https://vercel.com/seu-user/seu-projeto/logs
+   
+   Procure por:
+   [abc-123] 🔥 Nova requisição recebida
+   [abc-123] ✅ Success em XXXXms
+
+□ 4. Monitorar por 30 minutos
+   - Taxa de sucesso deve ser >90%
+   - Tempo médio <8s
+   - Erros 504 só em casos extremos
+
+
+🔍 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Erro ainda ocorre?
+
+1. ERRO 500 VAZIO (sem mensagem)
+   Causa: Variáveis de ambiente não configuradas
+   Fix: Vercel Dashboard > Settings > Environment Variables
+   
+2. ERRO 504 GATEWAY_TIMEOUT
+   Causa: Processamento >8s (Gemini/HF lento)
+   Fix 1: Reduza tamanho da imagem no frontend (800px, 60% quality)
+   Fix 2: Implemente cache (veja FIX_ERRO_500_VERCEL.md)
+   
+3. ERRO 507 INSUFFICIENT_STORAGE
+   Causa: Memória RAM estourada
+   Fix: Reduza maxWidth para 800px em utils.ts
+   
+4. ERRO 502 BAD_GATEWAY
+   Causa: Gemini/HuggingFace fora do ar
+   Fix: Implemente retry ou fallback local
+
+
+📈 MÉTRICAS ESPERADAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ANTES da correção:
+❌ Timeout: 50s (excede limite)
+❌ Taxa de erro: ~80%
+❌ Logs: Genéricos
+
+DEPOIS da correção:
+✅ Timeout: 8s (dentro do limite)
+✅ Taxa de sucesso: ~90%
+✅ Logs: Detalhados com requestId
+✅ Fallback automático quando necessário
+
+
+📞 SUPORTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Se o problema persistir:
+
+1. Encontre o requestId no erro:
+   {"error": "...", "requestId": "abc-123", ...}
+
+2. Busque nos logs da Vercel:
+   vercel logs | grep "abc-123"
+
+3. Copie o stack trace completo:
+   [abc-123] 💥 ERRO após 8200ms: ...
+
+4. Verifique a documentação:
+   - FIX_ERRO_500_VERCEL.md (guia completo)
+   - RELATORIO_AUDITORIA_CODIGO.md (problemas no código)
+
+
+🎯 PRÓXIMOS PASSOS (OTIMIZAÇÕES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Após deploy estável:
+
+□ Implementar cache Redis (evita reprocessamento)
+□ Lazy loading de modelos AI
+□ Considerar upgrade para Vercel Pro (60s timeout)
+□ Implementar processamento local no cliente (fallback)
+□ Adicionar rate limiting por usuário
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Última atualização: 2026-02-22
+Versão: 2.0 (Hobby Plan Optimized)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,13 @@
+# Ambiente local
+.env
+
+# Dados persistidos (não commitar)
+data/*.json
+services/gateway/credits.json
+services/gateway/task-metrics.json
+
+# Dependências
+node_modules/
+
+# Logs
+*.log
