@@ -46,14 +46,9 @@ function isValidWebhookUrl(url) {
  * Executa o processamento completo de simulação (análise + IA + validação).
  * Usado tanto no modo síncrono quanto no background do modo assíncrono.
  */
-async function runSimulation(imageBase64, material, clientKey) {
+async function runSimulation(imageBase64, material) {
   const context = await analyzeRoom(imageBase64);
   const result = await applyMaterial(imageBase64, material, context);
-
-  // Incrementa uso do cliente após chamada ao provider
-  if (clientKey) {
-    incrementUsage(clientKey);
-  }
 
   if (result.fallback) {
     return { fallback: true, fallbackDescription: result.fallbackDescription };
@@ -153,12 +148,17 @@ router.post('/', async (req, res, next) => {
       }
 
       try {
-        const simResult = await runSimulation(imageBase64, material, req.client?.key);
+        const simResult = await runSimulation(imageBase64, material);
 
         if (simResult.fallback) {
           log('warn', 'simulate', 'fallback_activated', { clientId, reason: 'all_providers_failed', latencyMs: Date.now() - startTime });
           res.set('X-Cache', 'MISS');
           return res.status(200).json({ editedImageBase64: null, fidelity: 0.0, context: null, fallbackDescription: simResult.fallbackDescription });
+        }
+
+        // Só debita após a validação passar — cliente paga por resultado, não por tentativa
+        if (req.client?.key) {
+          incrementUsage(req.client.key);
         }
 
         const successResponse = { editedImageBase64: simResult.editedImageBase64, fidelity: simResult.fidelity, context: simResult.context };
@@ -254,11 +254,6 @@ router.post('/', async (req, res, next) => {
             return r;
           });
 
-          // Incrementa uso após chamada ao provider
-          if (req.client?.key) {
-            incrementUsage(req.client.key);
-          }
-
           jobManager.updateJob(jobId, { progress: 75 });
 
           if (result.fallback) {
@@ -295,6 +290,11 @@ router.post('/', async (req, res, next) => {
               await sendWebhookNotification(webhookUrl, { jobId, status: 'failed', error: errMsg });
             }
             return;
+          }
+
+          // Só debita após validação de invariantes — cliente paga por resultado
+          if (req.client?.key) {
+            incrementUsage(req.client.key);
           }
 
           // Sucesso
