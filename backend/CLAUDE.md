@@ -1,4 +1,4 @@
-# CLAUDE.md — PisoRealView Pro
+# CLAUDE.md — MaterialView Pro
 
 Guia de trabalho para IAs e novos desenvolvedores. Leia antes de modificar qualquer arquivo.
 

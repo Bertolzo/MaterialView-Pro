@@ -1,4 +1,3 @@
-// frontend/src/App.jsx
 import { useState } from 'react';
 import ImageUploader from './components/ImageUploader.jsx';
 import MaterialSelector from './components/MaterialSelector.jsx';
@@ -7,19 +6,15 @@ import CheckoutModal from './components/CheckoutModal.jsx';
 import TrialModal from './components/TrialModal.jsx';
 import Demo from './pages/Demo.jsx';
 import MinhaConta from './pages/MinhaConta.jsx';
-import { simulate } from './api/client.js';
 import { useAffiliate } from './hooks/useAffiliate.js';
+import { useSimulation } from './hooks/useSimulation.js';
 
 const MATERIALS = [
-  { type: 'porcelanato', color: 'cinza-claro', dimensions: '60x60cm' },
-  { type: 'vinílico', color: 'carvalho', dimensions: '120x20cm' },
-  { type: 'madeira', color: 'bege', dimensions: '90x15cm' },
-];
-
-const PROGRESS_STEPS = [
-  'Analisando imagem...',
-  'Aplicando material...',
-  'Finalizando...',
+  { type: 'porcelanato', color: 'cinza-claro', dimensions: '60x60cm', category: 'floor' },
+  { type: 'vinílico', color: 'carvalho', dimensions: '120x20cm', category: 'floor' },
+  { type: 'madeira', color: 'bege', dimensions: '90x15cm', category: 'floor' },
+  { type: 'tinta-acrilica', color: 'branco-neve', dimensions: '18L', category: 'paint' },
+  { type: 'esmalte-automotivo', color: 'preto-jet', dimensions: '1L', category: 'automotive' },
 ];
 
 // Roteamento simples baseado em pathname
@@ -44,76 +39,33 @@ export default function App() {
 
 function MainApp() {
   const affiliateRef = useAffiliate();
-  const [imageBase64, setImageBase64] = useState(null);
-  const [material, setMaterial] = useState(MATERIALS[0]);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [progressStep, setProgressStep] = useState(0);
+  const sim = useSimulation();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [trialOpen, setTrialOpen] = useState(false);
 
-  async function handleSimulate() {
-    if (!imageBase64) return;
-    setLoading(true);
-    setError(null);
-    setResult(null);
-    setProgressStep(0);
-
-    const stepInterval = setInterval(() => {
-      setProgressStep((prev) => Math.min(prev + 1, PROGRESS_STEPS.length - 1));
-    }, 2000);
-
-    try {
-      const response = await simulate(imageBase64, material);
-
-      if (response.status === 200) {
-        const data = await response.json();
-        if (data.editedImageBase64) {
-          setResult(data);
-        } else if (data.fallbackDescription) {
-          setError(`Fallback: ${data.fallbackDescription}`);
-        } else {
-          setError('Resposta inesperada do servidor.');
-        }
-      } else if (response.status === 409) {
-        setError(
-          'Este material não é compatível com a imagem. Tente outro material ou outra foto.'
-        );
-      } else {
-        setError('Ocorreu um erro ao processar sua solicitação. Tente novamente.');
-      }
-    } catch {
-      setError('Ocorreu um erro ao processar sua solicitação. Tente novamente.');
-    } finally {
-      clearInterval(stepInterval);
-      setLoading(false);
-    }
-  }
-
   return (
     <main>
-      <h1>PisosRealView</h1>
-      <ImageUploader onImage={setImageBase64} />
+      <h1>MaterialView Pro</h1>
+      <ImageUploader onImage={sim.setImageBase64} />
       <MaterialSelector
         materials={MATERIALS}
-        selected={material}
-        onChange={setMaterial}
+        selected={sim.material}
+        onChange={sim.setMaterial}
       />
-      <button onClick={handleSimulate} disabled={!imageBase64 || loading}>
-        {loading ? PROGRESS_STEPS[progressStep] : 'Simular'}
+      <button onClick={sim.simulate} disabled={!sim.imageBase64 || sim.loading}>
+        {sim.loading ? sim.progressLabel : 'Simular'}
       </button>
-      {loading && (
+      {sim.loading && (
         <p aria-live="polite" style={{ color: '#6b7280', fontSize: '0.9rem' }}>
-          {PROGRESS_STEPS[progressStep]}
+          {sim.progressLabel}
         </p>
       )}
       <button onClick={() => setCheckoutOpen(true)}>Assinar</button>
       <button onClick={() => setTrialOpen(true)}>Começar grátis</button>
-      <ResultViewer result={result} error={error} />
-      {result?.provider && (
+      <ResultViewer result={sim.result} error={sim.error} />
+      {sim.result?.provider && (
         <p style={{ fontSize: '0.8rem', color: '#6b7280', fontStyle: 'italic' }}>
-          Simulado com {result.provider}
+          Simulado com {sim.result.provider}
         </p>
       )}
       <CheckoutModal

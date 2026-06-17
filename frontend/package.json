@@ -1,7 +1,7 @@
 {
-  "name": "pisosrealview-frontend",
+  "name": "materialview-frontend",
   "version": "1.0.0",
-  "description": "Frontend React + Vite para PisosRealView",
+  "description": "Frontend React + Vite para MaterialView Pro",
   "type": "module",
   "scripts": {
     "dev": "vite",

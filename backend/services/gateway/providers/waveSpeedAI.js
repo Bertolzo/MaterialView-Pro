@@ -8,29 +8,27 @@ const POLL_INTERVAL_MS = 3000;
 const POLL_MAX_ATTEMPTS = 15; // 45s total
 
 /**
- * Constrói prompt adaptativo baseado na dificuldade da tarefa (IRT-Router).
- * Imagens de alta dificuldade (muitos objetos, iluminação complexa) recebem
- * instruções mais específicas para preservar a cena original.
+ * Constrói prompt adaptativo baseado na dificuldade da tarefa e tipo de superfície (IRT-Router).
+ * Suporta pisos, paredes, tetos, carrocerias e móveis.
  */
-function buildFloorPrompt(material, context) {
+function buildMaterialPrompt(material, context) {
   const difficulty = context?.difficulty || 'low';
+  const surfaceType = context?.surfaceType || 'floor';
+  const surfaceLabel = { floor: 'floor surface', wall: 'wall surface', ceiling: 'ceiling', 'car-body': 'car body', furniture: 'furniture surface' }[surfaceType] || 'surface';
   const lightingHint = context?.lighting?.direction && context.lighting.direction !== 'unknown'
     ? `, maintaining ${context.lighting.direction} lighting direction`
     : '';
 
-  const baseInstruction = `Replace ONLY the floor surface with ${material.color} ${material.type} tiles (${material.dimensions}).`;
+  const baseInstruction = `Apply ${material.color} ${material.type} (${material.dimensions}) to the ${surfaceLabel}. Keep all other elements exactly as they are, preserving the original scene structure.`;
 
   if (difficulty === 'high') {
-    // Prompt detalhado para cenas complexas: muitos objetos, iluminação difícil
-    return `${baseInstruction} This is a complex scene with multiple objects and challenging lighting. Preserve EXACTLY: all furniture positions, shadow directions and intensities, wall colors and textures, ceiling, decorations, and all non-floor elements. Apply realistic reflections of the room on the new floor surface. The floor replacement must be seamless and photorealistic${lightingHint}.`;
+    return `${baseInstruction} This is a complex scene with multiple objects and challenging lighting. Preserve EXACTLY: all furniture positions, shadow directions and intensities, wall colors and textures, ceiling, decorations, and all non-target elements. Apply realistic reflections on the new surface. The material application must be seamless and photorealistic${lightingHint}.`;
   }
 
   if (difficulty === 'medium') {
-    // Prompt intermediário
-    return `${baseInstruction} Keep all furniture, shadows, walls, ceiling and decorations exactly as they are. Apply realistic floor texture with proper perspective${lightingHint}. Photorealistic result.`;
+    return `${baseInstruction} Keep all furniture, shadows, walls, ceiling and decorations exactly as they are. Apply realistic texture with proper perspective${lightingHint}. Photorealistic result.`;
   }
 
-  // Prompt padrão para cenas simples (low difficulty)
   return `${baseInstruction} Keep all furniture, shadows, walls, ceiling and decorations exactly as they are${lightingHint}. Photorealistic result.`;
 }
 
@@ -101,7 +99,7 @@ export async function waveSpeedAI(imageBase64, material, context, signal) {
   const apiKey = process.env.WAVESPEED_API_KEY;
   if (!apiKey) throw new Error('WAVESPEED_API_KEY not set');
 
-  const prompt = buildFloorPrompt(material, context);
+  const prompt = buildMaterialPrompt(material, context);
   const cleanBase64 = imageBase64.replace(/^data:image\/[a-z]+;base64,/, '');
 
   const response = await fetch(`${WAVESPEED_BASE_URL}${WAVESPEED_ENDPOINT}`, {

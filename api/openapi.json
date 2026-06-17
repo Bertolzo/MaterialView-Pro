@@ -1,12 +1,12 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "PisosRealView Pro API",
+    "title": "MaterialView Pro API",
     "description": "API for floor material analysis and rendering service",
     "version": "1.0.0",
     "contact": {
-      "name": "PisosRealView Pro Support",
-      "email": "support@pisosrealview.com"
+      "name": "MaterialView Pro Support",
+      "email": "support@materialview.com"
     }
   },
   "servers": [
@@ -15,7 +15,7 @@
       "description": "Development server"
     },
     {
-      "url": "https://api.pisosrealview.com",
+      "url": "https://api.materialview.com",
       "description": "Production server"
     }
   ],

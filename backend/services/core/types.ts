@@ -36,12 +36,15 @@ export interface RenderResult {
 
 export type FidelityLevel = 0 | 1 | 2 | 3;
 
-export interface RoomAnalysis {
+export type SurfaceType = 'floor' | 'wall' | 'ceiling' | 'car-body' | 'furniture';
+
+export interface SurfaceAnalysis {
   geometry: 'rectangular' | 'l-shaped' | 'corridor' | 'complex';
-  obstacles: number; // número de objetos detectados
+  obstacles: number;
   lighting: 'good' | 'medium' | 'poor';
-  floorArea: number; // pixels ou proporção
-  mask?: string; // base64 da máscara do piso
+  surfaceArea: number;
+  surfaceType: SurfaceType;
+  mask?: string;
 }
 
 export interface BatchResult {

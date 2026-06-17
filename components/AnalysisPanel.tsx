@@ -27,7 +27,7 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = React.memo(({ analysis, onOp
         <button
           onClick={onOpenMask}
           className="flex-1 px-3 py-2 bg-brand-dark/50 border border-brand-accent/30 rounded-lg text-brand-accent text-xs font-semibold hover:bg-brand-accent/10 transition-colors flex items-center justify-center gap-2"
-          title="Definir área do piso manualmente para evitar vazamentos"
+          title="Definir área manualmente para evitar vazamentos"
         >
           <i className="fas fa-draw-polygon"></i>
           Máscara Manual

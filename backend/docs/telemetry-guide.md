@@ -1,6 +1,6 @@
 # Guia de Telemetria — OpenTelemetry + Jaeger
 
-> Para LLMs: este arquivo descreve como o tracing funciona no PisoRealView Pro.
+> Para LLMs: este arquivo descreve como o tracing funciona no MaterialView Pro.
 > O sistema opera em modo **no-op por padrão** (`OTEL_ENABLED=false`).
 > Zero overhead, zero conexões de rede, zero dependências em testes.
 
@@ -39,7 +39,7 @@ docker run -d --name jaeger \
 # .env (backend/)
 OTEL_ENABLED=true
 OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
-OTEL_SERVICE_NAME=pisosrealview-backend
+OTEL_SERVICE_NAME=materialview-backend
 OTEL_SERVICE_VERSION=1.0.0
 ```
 
@@ -57,7 +57,7 @@ O log de inicialização confirmará:
 ## Ler Traces no Jaeger
 
 1. Acesse http://localhost:16686
-2. Selecione o serviço `pisosrealview-backend`
+2. Selecione o serviço `materialview-backend`
 3. Clique em "Find Traces"
 4. Cada trace representa uma requisição `POST /v1/simulate`
 

@@ -11,7 +11,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   res.status(200).json({
     status: "ok",
-    service: "PisosRealView Bridge",
+    service: "MaterialView Bridge",
     runtime: "vercel-serverless",
     version: "1.0.0",
     selfAuditEnabled: process.env.ENABLE_SELF_AUDIT === 'true'

@@ -14,6 +14,7 @@ import { apiKeyMiddleware } from '../middleware/apiKey.js';
 import { incrementUsage } from '../services/apiKeyStore.js';
 import { log } from '../services/gateway/logger.js';
 import { getTracer, withSpan, getContext } from '../tracing.js';
+import { getIdempotencyKey, getCachedIdempotentResult, setIdempotentResult } from '../middleware/idempotency.js';
 
 const router = Router();
 
@@ -121,6 +122,19 @@ router.post('/', async (req, res, next) => {
       }
     }
 
+    // ---------------------------------------------------------
+    // Idempotência: verifica Idempotency-Key antes de processar
+    // ---------------------------------------------------------
+    const idempotencyKey = getIdempotencyKey(req);
+    if (idempotencyKey) {
+      const cachedIdempotent = getCachedIdempotentResult(idempotencyKey);
+      if (cachedIdempotent) {
+        log('info', 'simulate', 'idempotency_replay', { clientId, idempotencyKey: idempotencyKey.slice(0, 8) });
+        res.set('X-Idempotency', 'REPLAY');
+        return res.status(200).json(cachedIdempotent);
+      }
+    }
+
     // =========================================================
     // MODO SÍNCRONO LEGADO (X-Sync-Mode: true)
     // Preserva comportamento anterior integralmente.
@@ -149,6 +163,7 @@ router.post('/', async (req, res, next) => {
 
         const successResponse = { editedImageBase64: simResult.editedImageBase64, fidelity: simResult.fidelity, context: simResult.context };
         setCachedSimulation(cacheKey, successResponse);
+        if (idempotencyKey) setIdempotentResult(idempotencyKey, successResponse);
         log('info', 'simulate', 'simulation_success', { clientId, provider: simResult.provider, fidelity: simResult.fidelity, latencyMs: Date.now() - startTime });
         res.set('X-Cache', 'MISS');
         return res.status(200).json(successResponse);
@@ -288,6 +303,7 @@ router.post('/', async (req, res, next) => {
           context: result.context || context,
         };
 
+        if (idempotencyKey) setIdempotentResult(idempotencyKey, successResult);
         jobManager.updateJob(jobId, { status: 'completed', progress: 100, result: successResult });
         rootSpan.setStatus({ code: 1 });
         rootSpan.end();

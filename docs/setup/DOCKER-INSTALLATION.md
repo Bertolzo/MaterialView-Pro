@@ -2,7 +2,7 @@
 
 **System:** Debian GNU/Linux 13 (trixie)  
 **Date:** 2026-02-27  
-**Purpose:** Local development and testing for PisosRealView Pro
+**Purpose:** Local development and testing for MaterialView Pro
 
 ---
 
@@ -140,7 +140,7 @@ Setting up docker.io (XX.X.X-X) ...
 sudo apt-get install -y docker-compose
 ```
 
-Docker Compose is used for multi-container applications (not strictly needed for PisosRealView Pro, but useful).
+Docker Compose is used for multi-container applications (not strictly needed for MaterialView Pro, but useful).
 
 ### Step 4: Configure User Permissions
 
@@ -268,7 +268,7 @@ sudo systemctl restart docker
 
 ---
 
-## Next Steps for PisosRealView Pro
+## Next Steps for MaterialView Pro
 
 Once Docker is installed and verified:
 
@@ -302,7 +302,7 @@ Docker Desktop is primarily for Windows and macOS. For Debian/Linux, the command
 
 - **Docker Documentation:** https://docs.docker.com/engine/install/debian/
 - **Docker Compose Documentation:** https://docs.docker.com/compose/
-- **PisosRealView Pro Tasks:** `.kiro/specs/multi-provider-ai-architecture/tasks.md`
+- **MaterialView Pro Tasks:** `.kiro/specs/multi-provider-ai-architecture/tasks.md`
 - **Dockerfile:** `./Dockerfile`
 
 ---

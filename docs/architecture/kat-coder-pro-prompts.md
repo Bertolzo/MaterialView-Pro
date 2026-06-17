@@ -21,7 +21,7 @@ Cada prompt foi desenhado para:
 Use esta abertura sempre que necessário:
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Siga estas regras:
 - implemente apenas o item solicitado
@@ -87,7 +87,7 @@ Cada prompt contém:
 ## Prompt 1. Cache de prompts
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Implementar cache em memória para carregamento de prompts no hot path.
@@ -128,7 +128,7 @@ Critério de conclusão:
 ## Prompt 2. Remover `Sentry.init()` do request path
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Remover a inicialização do Sentry do caminho por request nos controllers de rendering.
@@ -169,7 +169,7 @@ Critério de conclusão:
 ## Prompt 3. Extrair tipos de observabilidade para camada compartilhada
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Remover dependência de `services` na porta de observabilidade da camada `application`.
@@ -210,7 +210,7 @@ Critério de conclusão:
 ## Prompt 4. Expandir testes de arquitetura
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Expandir os testes de arquitetura e guardrails do domínio `rendering`.
@@ -248,7 +248,7 @@ Critério de conclusão:
 ## Prompt 5. Tornar `withTimeout` seguro e limpo
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Refatorar `withTimeout` para limpar timers corretamente e preparar base para cancelamento consistente.
@@ -287,7 +287,7 @@ Critério de conclusão:
 ## Prompt 6. Cancelamento real na análise HF
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Adicionar cancelamento real ao fluxo de análise Hugging Face.
@@ -325,7 +325,7 @@ Critério de conclusão:
 ## Prompt 7. Cache server-side de catálogo
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Adicionar cache server-side para resolução de catálogo de materiais.
@@ -364,7 +364,7 @@ Critério de conclusão:
 ## Prompt 8. Política inicial de cache server-side para textura
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Implementar uma política inicial de cache server-side para texturas no backend.
@@ -405,7 +405,7 @@ Critério de conclusão:
 ## Prompt 9. Introduzir composition root explícito
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Introduzir um composition root explícito para o domínio `rendering`.
@@ -449,7 +449,7 @@ Critério de conclusão:
 ## Prompt 10. Endurecer guardrail `application -> infrastructure`
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Endurecer os guardrails arquiteturais após a introdução do composition root.
@@ -485,7 +485,7 @@ Critério de conclusão:
 ## Prompt 11. Migrar `geminiExecution.ts` para implementação canônica real
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Migrar `src/domains/rendering/infrastructure/ai/geminiExecution.ts` para implementação canônica real.
@@ -522,7 +522,7 @@ Critério de conclusão:
 ## Prompt 12. Migrar wrappers restantes de IA e auditoria
 
 ```md
-Você está trabalhando no projeto PisosRealView PRO.
+Você está trabalhando no projeto MaterialView PRO.
 
 Tarefa:
 Migrar os wrappers restantes da infraestrutura canônica que ainda apontam para `services/*`.

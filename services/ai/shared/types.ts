@@ -1,8 +1,11 @@
-export interface RoomContext {
-  type: 'living' | 'kitchen' | 'bathroom' | 'bedroom' | 'corridor' | 'complex';
+export type SurfaceType = 'floor' | 'wall' | 'ceiling' | 'car-body' | 'furniture';
+
+export interface SurfaceContext {
+  type: 'living' | 'kitchen' | 'bathroom' | 'bedroom' | 'corridor' | 'complex' | 'garage' | 'exterior';
   shape: 'rectangular' | 'l-shape' | 't-shape' | 'irregular';
   hasObstacles: boolean;
-  floorPlaneDetected: boolean;
+  surfaceDetected: boolean;
+  surfaceType: SurfaceType;
   lighting: 'bright' | 'dim' | 'mixed';
   confidence: number;
 }

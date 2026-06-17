@@ -45,7 +45,8 @@ export default function TrialModal({ open, onClose, affiliateRef = null, onSucce
       }
 
       onSuccess?.(data.apiKey);
-      localStorage.setItem('pisosrealview_api_key', data.apiKey);
+      localStorage.setItem('materialview_api_key', data.apiKey);
+      localStorage.removeItem('pisosrealview_api_key');
       window.location.href = '/minha-conta';
     } catch {
       setError('Erro de conexão. Verifique sua internet e tente novamente.');

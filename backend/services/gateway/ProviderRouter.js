@@ -51,10 +51,11 @@ export class ProviderRouter {
         log('warn', provider.id, 'failed', { reason: err.message, difficulty });
       }
     }
+    const surfaceLabel = { floor: 'a superficie', wall: 'a parede', ceiling: 'ao teto', 'car-body': 'a carroceria', furniture: 'ao movel' }[context?.surfaceType] || 'a superficie';
     return {
       success: false, fallback: true, editedImageBase64: null, fidelity: 0.0,
       provider: 'local-fallback', difficulty,
-      fallbackDescription: 'Simulacao indisponivel. O material ' + material.type + ' ' + material.color + ' ' + material.dimensions + ' seria aplicado ao piso.',
+      fallbackDescription: 'Simulacao indisponivel. O material ' + material.type + ' ' + material.color + ' ' + material.dimensions + ' seria aplicado ' + surfaceLabel + '.',
     };
   }
 

@@ -2,7 +2,8 @@ export async function pikaLabs(imageBase64, material, context, signal) {
   const apiKey = process.env.PIKA_API_KEY;
   if (!apiKey) throw new Error('PIKA_API_KEY not set');
   const cleanBase64 = imageBase64.replace(/^data:image\/[a-z]+;base64,/, '');
-  const prompt = `Replace the floor with ${material.color} ${material.type} tiles (${material.dimensions}). Keep all furniture, shadows and walls exactly as they are. Photorealistic result.`;
+  const surfaceLabel = context?.surfaceType === 'car-body' ? 'car body' : context?.surfaceType === 'wall' ? 'wall' : context?.surfaceType === 'ceiling' ? 'ceiling' : 'surface';
+  const prompt = `Apply ${material.color} ${material.type} (${material.dimensions}) to the ${surfaceLabel}. Keep all scene elements exactly as they are. Photorealistic result.`;
 
   const response = await fetch('https://api.pika.art/v1/generate', {
     method: 'POST',

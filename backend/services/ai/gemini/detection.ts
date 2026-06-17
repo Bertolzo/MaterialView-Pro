@@ -5,20 +5,23 @@ export interface GeminiDetectionRequest {
   prompt?: string;
 }
 
-export interface RoomContextDetection {
-  roomType: 'living-room' | 'kitchen' | 'bedroom' | 'bathroom' | 'office' | 'complex';
+export type SurfaceType = 'floor' | 'wall' | 'ceiling' | 'car-body' | 'furniture';
+
+export interface SurfaceContextDetection {
+  roomType: 'living-room' | 'kitchen' | 'bedroom' | 'bathroom' | 'office' | 'garage' | 'complex';
   geometry: 'rectangular' | 'corridor' | 'l-shaped' | 'complex';
   obstacles: number;
   lighting: 'poor' | 'medium' | 'good';
-  floorArea: number;
+  surfaceArea: number;
+  targetSurface: SurfaceType;
   confidence: number;
 }
 
 /**
- * Detecção real de contexto de sala usando Gemini API
- * Implementação direta sem abstrações desnecessárias
+ * Detecção de contexto de superfície usando Gemini API
+ * Suporta pisos, paredes, tetos, carrocerias e móveis
  */
-export async function detectRoomContext(imageBase64: string): Promise<RoomContextDetection> {
+export async function detectSurfaceContext(imageBase64: string): Promise<SurfaceContextDetection> {
   const apiKey = process.env.GEMINI_API_KEY;
   
   if (!apiKey) {
@@ -26,15 +29,14 @@ export async function detectRoomContext(imageBase64: string): Promise<RoomContex
   }
 
   const prompt = `
-Analise esta imagem de ambiente interno e retorne apenas JSON com:
-- roomType: living-room, kitchen, bedroom, bathroom, office ou complex
+Analise esta imagem e retorne apenas JSON com:
+- roomType: living-room, kitchen, bedroom, bathroom, office, garage ou complex
 - geometry: rectangular, corridor, l-shaped, complex
-- obstacles: número estimado de obstáculos no chão (0-10)
+- obstacles: número estimado de obstáculos na superfície alvo (0-10)
 - lighting: poor, medium, good
-- floorArea: área estimada do piso em pixels
-- confidence: confiança da análise (0-1)
-
-Foco em detectar o contexto para simulação de pisos.`;
+- surfaceArea: área estimada da superfície alvo em pixels
+- targetSurface: floor, wall, ceiling, car-body ou furniture (qual superfície o usuário provavelmente quer modificar)
+- confidence: confiança da análise (0-1)`;
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${apiKey}`, {
@@ -90,7 +92,7 @@ Foco em detectar o contexto para simulação de pisos.`;
 /**
  * Fallback simples para HuggingFace - sem complexidade
  */
-async function fallbackHuggingFaceDetection(imageBase64: string): Promise<RoomContextDetection> {
+async function fallbackHuggingFaceDetection(imageBase64: string): Promise<SurfaceContextDetection> {
   const hfToken = process.env.HUGGINGFACE_TOKEN;
   
   if (!hfToken) {
@@ -120,12 +122,13 @@ async function fallbackHuggingFaceDetection(imageBase64: string): Promise<RoomCo
     const results = await response.json();
     
     // Mapear classes do modelo para tipos de sala
-    const roomMapping: Record<string, RoomContextDetection['roomType']> = {
+    const roomMapping: Record<string, SurfaceContextDetection['roomType']> = {
       'living room': 'living-room',
       'kitchen': 'kitchen', 
       'bedroom': 'bedroom',
       'bathroom': 'bathroom',
-      'office': 'office'
+      'office': 'office',
+      'garage': 'garage'
     };
 
     const primaryLabel = results[0]?.label?.toLowerCase() || 'complex';
@@ -133,10 +136,11 @@ async function fallbackHuggingFaceDetection(imageBase64: string): Promise<RoomCo
 
     return {
       roomType,
-      geometry: 'rectangular', // Fallback simples
-      obstacles: 2, // Fallback conservador
+      geometry: 'rectangular',
+      obstacles: 2,
       lighting: 'medium',
-      floorArea: 300000, // Estimativa padrão
+      surfaceArea: 300000,
+      targetSurface: 'floor',
       confidence: 0.7
     };
     
@@ -149,8 +153,7 @@ async function fallbackHuggingFaceDetection(imageBase64: string): Promise<RoomCo
 /**
  * Análise básica da imagem como último recurso
  */
-function basicImageAnalysis(imageBase64: string): RoomContextDetection {
-  // Análise muito básica baseada apenas no tamanho
+function basicImageAnalysis(imageBase64: string): SurfaceContextDetection {
   const imageSize = Buffer.from(imageBase64, 'base64').length;
   
   return {
@@ -158,7 +161,8 @@ function basicImageAnalysis(imageBase64: string): RoomContextDetection {
     geometry: 'rectangular', 
     obstacles: 3,
     lighting: 'medium',
-    floorArea: imageSize > 50000 ? 400000 : 200000,
-    confidence: 0.3 // Baixa confiança
+    surfaceArea: imageSize > 50000 ? 400000 : 200000,
+    targetSurface: 'floor',
+    confidence: 0.3
   };
 }

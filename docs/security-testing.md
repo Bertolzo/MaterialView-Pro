@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the security testing procedures implemented for PisosRealView Pro, including vulnerability scanning with Snyk and OWASP ZAP API security testing.
+This document outlines the security testing procedures implemented for MaterialView Pro, including vulnerability scanning with Snyk and OWASP ZAP API security testing.
 
 ## Security Testing Tools
 
@@ -170,5 +170,5 @@ This document should be updated when:
 ## Contact Information
 
 For security-related questions or concerns:
-- Security Team: security@pisosrealview.com
+- Security Team: security@materialview.com
 - Emergency Contact: Available 24/7 for critical security incidents

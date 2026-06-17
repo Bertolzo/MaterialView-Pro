@@ -1,4 +1,4 @@
-# Métricas Internas — PisosRealView Pro
+# Métricas Internas — MaterialView Pro
 
 Documento operacional. Define os gatilhos numéricos que determinam quando evoluir cada componente técnico do sistema. Não é roadmap de features — é um guia de decisão baseado em dados reais de produção.
 

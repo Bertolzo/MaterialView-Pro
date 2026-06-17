@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Implementação do cache de prompts no serviço `promptLoader.ts` como parte do backlog de otimização de performance do PisosRealView PRO.
+Implementação do cache de prompts no serviço `promptLoader.ts` como parte do backlog de otimização de performance do MaterialView PRO.
 
 ## Problema Resolvido
 
@@ -103,4 +103,4 @@ A implementação do cache de prompts foi concluída com sucesso, atendendo a to
 
 **Status**: ✅ IMPLEMENTADO E VALIDADO
 **Data**: 03/09/2026
-**Versão**: PisosRealView PRO - Cache de Prompts v1.0
+**Versão**: MaterialView PRO - Cache de Prompts v1.0

@@ -28,7 +28,7 @@ export const ManualMaskingModal: React.FC<{
                 {/* Header */}
                 <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/50">
                     <div className="flex flex-col">
-                        <h3 className="text-white font-bold">Desenhar Máscara de Piso</h3>
+                        <h3 className="text-white font-bold">Desenhar Máscara</h3>
                         <span className="text-slate-500 text-[10px] uppercase tracking-wider font-bold">Restrição de Área Manual</span>
                     </div>
                     <div className="flex gap-2">
@@ -100,7 +100,7 @@ export const ManualMaskingModal: React.FC<{
                 <div className="p-6 bg-slate-900 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="flex flex-col">
                         <p className="text-slate-400 text-xs max-w-xs">
-                            Crie um polígono clicando ao redor da área de piso visível.
+                            Crie um polígono clicando ao redor da área visível.
                             Mínimo de 3 pontos para formar uma área.
                         </p>
                         {points.length > 0 && (

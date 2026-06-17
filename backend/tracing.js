@@ -4,7 +4,7 @@
 // sem importar nenhum pacote @opentelemetry/* e sem conexões de rede.
 
 const OTEL_ENABLED = process.env.OTEL_ENABLED === 'true';
-const SERVICE_NAME = process.env.OTEL_SERVICE_NAME || 'pisosrealview-backend';
+const SERVICE_NAME = process.env.OTEL_SERVICE_NAME || 'materialview-backend';
 const SERVICE_VERSION = process.env.OTEL_SERVICE_VERSION || '1.0.0';
 const DEFAULT_ENDPOINT = 'http://localhost:4318';
 

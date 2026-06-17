@@ -23,7 +23,7 @@ services:
   # postgres:
   #   image: postgres:15-alpine
   #   environment:
-  #     POSTGRES_DB: pisosrealview
+  #     POSTGRES_DB: materialview
   #     POSTGRES_USER: user
   #     POSTGRES_PASSWORD: password
   #   volumes:

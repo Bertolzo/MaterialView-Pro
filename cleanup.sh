@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # cleanup.sh — Move arquivos redundantes para old_backup/ após refatoração backend/frontend
-# Execute a partir da raiz de pisosrealview-pro-transformed/
+# Execute a partir da raiz de MaterialView-Pro/
 # Após validar que backend/ e frontend/ funcionam, pode deletar old_backup/ com segurança.
 
 set -e

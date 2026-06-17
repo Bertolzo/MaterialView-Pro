@@ -1,6 +1,6 @@
 import { gatewayOrchestrator } from '../../../../src/services/gateway';
-import { buildFloorReplacementPrompt } from '../context/promptBuilder';
-import { MaterialSpecs, RoomContext } from '../shared/types';
+import { buildMaterialApplicationPrompt } from '../context/promptBuilder';
+import { MaterialSpecs, SurfaceContext } from '../shared/types';
 import { optimizeImage } from '../shared/imageOptimizer';
 import { classifyFidelity } from './fidelityClassifier';
 import { CompositeInvariantValidator } from '../../core/invariants/CompositeInvariantValidator';
@@ -8,13 +8,12 @@ import { CompositeInvariantValidator } from '../../core/invariants/CompositeInva
 export async function applyMaterial(
   imageBase64: string,
   material: MaterialSpecs,
-  roomContext: RoomContext
+  surfaceContext: SurfaceContext
 ): Promise<{ editedImageBase64: string; fidelity: any }> {
   const invariantValidator = new CompositeInvariantValidator();
   
-  // Otimiza imagem original para validação
   const originalOptimized = await optimizeImage(imageBase64);
-  const prompt = buildFloorReplacementPrompt(material, roomContext);
+  const prompt = buildMaterialApplicationPrompt(material, surfaceContext);
   
   // Chama gateway para processamento
   const result = await gatewayOrchestrator.callWithFallback({
@@ -35,8 +34,8 @@ export async function applyMaterial(
     const compliance = await invariantValidator.validateAll(
       originalOptimized,
       editedImageBase64,
-      roomContext,
-      roomContext, // análise modificada será igual por enquanto (mock)
+      surfaceContext,
+      surfaceContext,
       [], // mock de objetos originais
       []  // mock de objetos modificados
     );

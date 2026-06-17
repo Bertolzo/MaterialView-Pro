@@ -75,7 +75,7 @@ export default function CheckoutModal({ open, onClose, affiliateRef = null }) {
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div style={styles.modal}>
-        <h2 id="checkout-modal-title" style={styles.title}>Assinar PisosRealView</h2>
+        <h2 id="checkout-modal-title" style={styles.title}>Assinar MaterialView Pro</h2>
 
         <form onSubmit={handleSubmit} noValidate>
           <label style={styles.label} htmlFor="checkout-name">Nome completo *</label>

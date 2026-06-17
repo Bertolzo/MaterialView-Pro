@@ -1,4 +1,4 @@
-# Checklist de Validação - PisosRealView Pro
+# Checklist de Validação - MaterialView Pro
 
 ## ✅ Validação Estática (Completa)
 

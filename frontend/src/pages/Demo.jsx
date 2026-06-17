@@ -83,7 +83,7 @@ export default function Demo() {
   return (
     <main style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.title}>PisosRealView — Demo</h1>
+        <h1 style={styles.title}>MaterialView Pro — Demo</h1>
         <p style={styles.subtitle}>
           Veja como ficaria um novo piso no seu ambiente. Sem cadastro, sem cartão.
         </p>

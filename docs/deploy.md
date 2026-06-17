@@ -1,4 +1,4 @@
-# Deploy – PisosRealView Pro
+# Deploy – MaterialView Pro
 
 ## Pré-requisitos
 
@@ -26,9 +26,9 @@
 | `ZHIPU_API_KEY` | Chave da API ZhipuAI CogView |
 | `ASAAS_API_KEY` | Chave da API Asaas (produção: prefixo `$aas_`) |
 | `ASAAS_WEBHOOK_SECRET` | Secret para validar webhooks do Asaas |
-| `CORS_ORIGIN` | URL pública do frontend no Vercel (ex: `https://pisosrealview.vercel.app`) |
+| `CORS_ORIGIN` | URL pública do frontend no Vercel (ex: `https://materialview.vercel.app`) |
 
-6. Após o deploy, copie a **URL pública** gerada pelo Railway (ex: `https://pisosrealview-backend.up.railway.app`).
+6. Após o deploy, copie a **URL pública** gerada pelo Railway (ex: `https://materialview-backend.up.railway.app`).
 7. Valide o health check: `GET https://<railway-url>/health` deve retornar `{ "ok": true }`.
 
 ---
@@ -43,7 +43,7 @@
 
 | Variável | Valor |
 |---|---|
-| `VITE_API_URL` | URL pública do Railway (ex: `https://pisosrealview-backend.up.railway.app`) |
+| `VITE_API_URL` | URL pública do Railway (ex: `https://materialview-backend.up.railway.app`) |
 
 6. Clique em **Deploy**. O Vercel fará o build com `npm run build` automaticamente.
 7. Valide que o frontend carrega e consegue chamar o backend sem erros de CORS.

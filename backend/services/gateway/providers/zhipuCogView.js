@@ -1,15 +1,17 @@
-function buildFloorPrompt(material, context) {
+function buildMaterialPrompt(material, context) {
+  const surfaceType = context?.surfaceType || 'floor';
+  const surfaceLabel = { floor: 'surface', wall: 'wall', ceiling: 'ceiling', 'car-body': 'car body', furniture: 'furniture' }[surfaceType] || 'surface';
   const lightingHint = context?.lighting?.direction !== 'unknown'
     ? `, maintaining ${context.lighting.direction} lighting`
     : '';
-  return `Replace the entire floor with ${material.color} ${material.type} tiles (${material.dimensions}). Keep all furniture, shadows, walls, ceiling and decorations exactly as they are${lightingHint}. Photorealistic result.`;
+  return `Apply ${material.color} ${material.type} (${material.dimensions}) to the ${surfaceLabel}. Keep all scene elements, shadows, walls, ceiling and decorations exactly as they are${lightingHint}. Photorealistic result.`;
 }
 
 export async function zhipuCogView(imageBase64, material, context, signal) {
   const apiKey = process.env.ZHIPU_API_KEY;
   if (!apiKey) throw new Error('ZHIPU_API_KEY not set');
 
-  const prompt = buildFloorPrompt(material, context);
+  const prompt = buildMaterialPrompt(material, context);
   const cleanBase64 = imageBase64.replace(/^data:image\/[a-z]+;base64,/, '');
 
   const response = await fetch('https://open.bigmodel.cn/api/paas/v4/images/edits', {

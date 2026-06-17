@@ -1,4 +1,4 @@
-# Relatório Estratégico - PisosRealView PRO
+# Relatório Estratégico - MaterialView PRO
 
 ## 1. Resumo Executivo
 

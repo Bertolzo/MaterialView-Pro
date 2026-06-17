@@ -1,8 +1,8 @@
-# Relatorio de Uso do `kwaipilot/kat-coder-pro` com Base na Analise do PisosRealView PRO
+# Relatorio de Uso do `kwaipilot/kat-coder-pro` com Base na Analise do MaterialView PRO
 
 ## Objetivo
 
-Este documento transforma a analise tecnica recente do PisosRealView PRO em um guia operacional para uso com multiplas CLIs e, em especial, com o `kwaipilot/kat-coder-pro`.
+Este documento transforma a analise tecnica recente do MaterialView PRO em um guia operacional para uso com multiplas CLIs e, em especial, com o `kwaipilot/kat-coder-pro`.
 
 O foco aqui nao e reanalisar o sistema, mas mostrar como usar a analise produzida para acelerar a implementacao das melhorias de forma controlada, incremental e auditavel.
 
@@ -41,7 +41,7 @@ O `kat-coder-pro` deve ser usado como um agente de implementacao semi-automatiza
 
 Ele nao substitui a analise arquitetural. Ele acelera a execucao dela.
 
-No contexto atual do PisosRealView PRO, o uso mais produtivo e:
+No contexto atual do MaterialView PRO, o uso mais produtivo e:
 
 - deixar a analise e o backlog em `.md`
 - usar uma CLI principal para coordenacao
@@ -259,7 +259,7 @@ Voce vai implementar apenas o item abaixo.
 Item: Cache de prompts
 
 Contexto:
-- Projeto: PisosRealView PRO
+- Projeto: MaterialView PRO
 - Dominio principal: `src/domains/rendering/`
 - Ha testes e guardrails arquiteturais ativos
 
@@ -435,7 +435,7 @@ Essas tarefas sao inadequadas para uso tatico de um agente e tendem a gerar:
 
 ## Estrategia recomendada para este projeto
 
-No estado atual do PisosRealView PRO, o melhor uso do `kat-coder-pro` e:
+No estado atual do MaterialView PRO, o melhor uso do `kat-coder-pro` e:
 
 - como executor de backlog priorizado
 - em ciclos pequenos

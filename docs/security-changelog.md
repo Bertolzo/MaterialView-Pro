@@ -1,4 +1,4 @@
-# Security Changelog — PisosRealView Pro
+# Security Changelog — MaterialView Pro
 
 Documento operacional de segurança. Registra todas as mudanças de segurança implementadas, os padrões adotados e os alertas para mudanças futuras.
 

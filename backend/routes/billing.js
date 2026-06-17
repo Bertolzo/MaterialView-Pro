@@ -11,6 +11,31 @@ import { loadKeys, saveKeys } from '../services/apiKeyStore.js';
 
 const router = Router();
 
+const processedPayments = new Set();
+const PROCESSED_PAYMENTS_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const paymentTimestamps = new Map();
+
+function isPaymentProcessed(paymentId) {
+  return processedPayments.has(paymentId);
+}
+
+function markPaymentProcessed(paymentId) {
+  processedPayments.add(paymentId);
+  paymentTimestamps.set(paymentId, Date.now());
+}
+
+function cleanExpiredPayments() {
+  const now = Date.now();
+  for (const [paymentId, ts] of paymentTimestamps) {
+    if (now - ts > PROCESSED_PAYMENTS_TTL_MS) {
+      processedPayments.delete(paymentId);
+      paymentTimestamps.delete(paymentId);
+    }
+  }
+}
+
+setInterval(cleanExpiredPayments, 60 * 60 * 1000);
+
 // ---------------------------------------------------------------------------
 // POST /v1/billing/subscribe
 // Cria cliente e assinatura no Asaas, retorna link de checkout
@@ -77,6 +102,10 @@ router.post('/webhook', (req, res) => {
     return res.status(400).json({ error: 'Payload inválido' });
   }
 
+  if (isPaymentProcessed(payment.id)) {
+    return res.status(200).json({ ok: true, deduplicated: true, paymentId: payment.id });
+  }
+
   const clientId = payment.externalReference || payment.subscription;
 
   if (!clientId) {
@@ -87,6 +116,7 @@ router.post('/webhook', (req, res) => {
   const clientKeys = Object.entries(keys).filter(([, client]) => client.clientId === clientId);
 
   if (event === 'PAYMENT_CONFIRMED') {
+    markPaymentProcessed(payment.id);
     for (const [key] of clientKeys) {
       keys[key].active = true;
       keys[key].suspended = false;
@@ -97,6 +127,7 @@ router.post('/webhook', (req, res) => {
   }
 
   if (event === 'PAYMENT_OVERDUE' || event === 'SUBSCRIPTION_CANCELLED') {
+    markPaymentProcessed(payment.id);
     for (const [key] of clientKeys) {
       keys[key].active = false;
       keys[key].suspended = true;
@@ -105,6 +136,7 @@ router.post('/webhook', (req, res) => {
     return res.status(200).json({ ok: true, event, clientId, action: 'suspended' });
   }
 
+  markPaymentProcessed(payment.id);
   return res.status(200).json({ ok: true, event, skipped: true });
 });
 

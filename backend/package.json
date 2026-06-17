@@ -1,7 +1,7 @@
 {
-  "name": "pisosrealview-backend",
+  "name": "materialview-backend",
   "version": "1.0.0",
-  "description": "Backend Express para PisosRealView — análise e simulação de materiais de piso",
+  "description": "Backend Express para MaterialView Pro — análise e simulação de materiais",
   "type": "module",
   "main": "server.js",
   "scripts": {

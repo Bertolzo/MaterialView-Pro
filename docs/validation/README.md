@@ -1,6 +1,6 @@
 # Documentação de Validação
 
-Esta pasta contém documentos relacionados à validação do código PisosRealView Pro.
+Esta pasta contém documentos relacionados à validação do código MaterialView Pro.
 
 ## Documentos Disponíveis
 

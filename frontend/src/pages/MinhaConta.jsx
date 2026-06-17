@@ -6,7 +6,11 @@ import { useState, useEffect } from 'react';
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export default function MinhaConta() {
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('pisosrealview_api_key') || '');
+  const [apiKey, setApiKey] = useState(() => {
+    return localStorage.getItem('materialview_api_key')
+      || localStorage.getItem('pisosrealview_api_key')
+      || '';
+  });
   const [usage, setUsage] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -40,7 +44,8 @@ export default function MinhaConta() {
     e.preventDefault();
     const key = e.target.elements.apiKey.value.trim();
     if (!key) return;
-    localStorage.setItem('pisosrealview_api_key', key);
+    localStorage.setItem('materialview_api_key', key);
+    localStorage.removeItem('pisosrealview_api_key');
     setApiKey(key);
     fetchUsage(key);
   }
