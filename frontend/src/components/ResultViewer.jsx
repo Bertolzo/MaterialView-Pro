@@ -12,7 +12,7 @@ export default function ResultViewer({ result, error }) {
     return (
       <img
         src={result.editedImageBase64}
-        alt="Simulação de piso"
+        alt="Simulação de material"
         style={{ maxWidth: '100%' }}
       />
     );

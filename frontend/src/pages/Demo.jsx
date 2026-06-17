@@ -85,7 +85,7 @@ export default function Demo() {
       <header style={styles.header}>
         <h1 style={styles.title}>MaterialView Pro — Demo</h1>
         <p style={styles.subtitle}>
-          Veja como ficaria um novo piso no seu ambiente. Sem cadastro, sem cartão.
+           Veja como ficaria um novo material no seu ambiente. Sem cadastro, sem cartão.
         </p>
       </header>
 
@@ -121,7 +121,7 @@ export default function Demo() {
         <section style={styles.resultSection}>
           <img
             src={result.editedImageBase64}
-            alt="Simulação de piso gerada pela IA"
+            alt="Simulação de material gerada pela IA"
             style={styles.resultImage}
           />
           {result.provider && (

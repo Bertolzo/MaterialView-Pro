@@ -34,6 +34,11 @@ export default function App() {
     return <MinhaConta />;
   }
 
+  if (route === '/visualizador-3d') {
+    window.location.href = '/visualizador-3d.html';
+    return null;
+  }
+
   return <MainApp />;
 }
 

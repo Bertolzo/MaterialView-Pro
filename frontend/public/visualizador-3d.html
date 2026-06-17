@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MaterialView Pro — Visualizador 3D</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #111; color: #fff; font-family: system-ui, -apple-system, sans-serif; }
+    #header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px; background: linear-gradient(180deg, #1a1a2e 0%, transparent 100%);
+    }
+    #header h1 { font-size: 16px; font-weight: 600; }
+    #header a { color: #94a3b8; text-decoration: none; font-size: 14px; }
+    #header a:hover { color: #fff; }
+    #info {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      padding: 12px 24px; border-radius: 8px; font-size: 13px; color: #94a3b8;
+      text-align: center; max-width: 500px; border: 1px solid #333;
+    }
+    #info strong { color: #3b82f6; }
+    #viewer-frame {
+      width: 100%; height: 100%; border: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1>MaterialView Pro — Visualizador 3D</h1>
+    <a href="/">&larr; Voltar</a>
+  </div>
+  <iframe id="viewer-frame"
+    src="https://superspl.at/viewer?noui&content=./samples/showroom.ply"
+    allow="clipboard-read; clipboard-write"
+    loading="lazy">
+  </iframe>
+  <div id="info">
+    Demonstração 3D com <strong>Gaussian Splatting</strong>.
+    Use o mouse para rotacionar e scroll para zoom.
+    Planos Enterprise transformam a foto do cliente em modelo 3D navegável.
+  </div>
+</body>
+</html>
